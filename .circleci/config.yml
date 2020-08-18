@@ -1,7 +1,7 @@
  version: 2.1
 
  orbs:
-  azure-acr: circleci/azure-acr@1.0.0
+  azure-acr: circleci/azure-acr@0.2.0
 
  workflows:
   build-deploy:
