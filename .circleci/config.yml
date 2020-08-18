@@ -4,9 +4,9 @@
   azure-acr: circleci/azure-acr@0.2.0
 
  workflows:
-  build-deploy:
+  build-deploy-dev:
     jobs:
-      - Dev:
+      - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
