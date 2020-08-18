@@ -17,4 +17,4 @@
        - run: 
           name: Run app
           command: 
-            dotnet run --project src/MySampleApp
+            dotnet run --project src/MySampleApp.csproj
