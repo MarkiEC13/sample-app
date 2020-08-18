@@ -9,8 +9,8 @@ RUN dotnet restore --verbosity minimal
 RUN dotnet publish -c Release -o output -v m
 
 # Test
-FROM build AS testrunner
-RUN dotnet test --verbosity quiet
+#FROM build AS testrunner
+#RUN dotnet test --verbosity quiet
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
