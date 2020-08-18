@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Restore and publish
 COPY ./src ./src
-COPY ./test ./test
+#COPY ./test ./test
 COPY *.sln .
 RUN dotnet restore --verbosity minimal
 RUN dotnet publish -c Release -o output -v m
