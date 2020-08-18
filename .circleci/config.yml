@@ -1,12 +1,20 @@
  version: 2.1
 
- orbs:
-  win: circleci/windows@2.2.0
-
  jobs:
    build:
-     executor: win/default     
-    
+     docker:
+       - image: mcr.microsoft.com/dotnet/core/sdk:2.2   
      steps:
        - checkout
-       - run: dotnet build
+       - run: 
+          name: Restore packages
+          command: 
+            dotnet restore
+       - run: 
+          name: Build app
+          command: 
+            dotnet build
+       - run: 
+          name: Run app
+          command: 
+            dotnet run
