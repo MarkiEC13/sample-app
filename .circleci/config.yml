@@ -3,14 +3,37 @@
  orbs:
   azure-acr: circleci/azure-acr@0.2.0
 
- workflows:
-  build-deploy-dev:
-    jobs:
+ jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1 
+    steps:
+      - checkout
+      - run:
+          name: Restore
+          command: dotnet restore
+      - run:
+          name: Build 
+          command: dotnet build
+
+  deploy:
+    machine:
+      image: ubuntu-1604:201903-01 
+    steps:
+      - checkout
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: $CIRCLE_TAG
+          tag: latest
+
+ workflows:
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
           filters:
-             branches:
-               only: master
+            branches:
+              only: master
