@@ -1,20 +1,16 @@
  version: 2.1
 
- jobs:
-   build:
-     docker:
-       - image: mcr.microsoft.com/dotnet/core/sdk:3.1   
-     steps:
-       - checkout
-       - run: 
-          name: Restore packages
-          command: 
-            dotnet restore
-       - run: 
-          name: Build app
-          command: 
-            dotnet build
-       - run: 
-          name: Run app
-          command: 
-            dotnet run --project src/MySampleApp.csproj
+ orbs:
+  azure-acr: circleci/azure-acr@1.0.0
+
+ workflows:
+  build-deploy:
+    jobs:
+      - Dev:
+          login-server-name: $ACR_SERVER_NAME
+          registry-name: $ACR_REGISTRY_NAME
+          repo: $ACR_REPO_NAME
+          tag: $CIRCLE_TAG
+          filters:
+             branches:
+               only: master
