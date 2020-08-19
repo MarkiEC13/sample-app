@@ -55,7 +55,7 @@
           success_message: "Production $CIRCLE_JOB deployment has been succeeded! :tada:"
           webhook: ${SLACK_WEBHOOK}
 
-  prod-approval-notify:
+  prod-approval:
     machine:
         image: 'ubuntu-1604:201903-01'
     steps:
@@ -75,13 +75,12 @@
           filters:
             branches:
               only: master
-      - prod-approval-notify:
+      - prod-approval:
           requires:
               - stage-deploy
       - prod-deploy:
           requires:
-            - stage-deploy
-            - prod-approval-notify
+            - prod-approval
           type: approval
           filters:
             branches:
