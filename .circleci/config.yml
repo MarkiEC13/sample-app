@@ -4,6 +4,21 @@
   azure-acr: circleci/azure-acr@0.2.0
   slack: circleci/slack@3.4.2
 
+ commands:
+  notify-failure:
+    steps:
+      - slack/status:
+          fail_only: true
+          failure_message: ":wall: $CIRCLE_JOB has failed!"
+          webhook: ${SLACK_WEBHOOK}
+
+  notify-success:
+    steps:
+      - slack/status:
+          fail_only: false
+          failure_message: ":tada: $CIRCLE_JOB has been succeeded!"
+          webhook: ${SLACK_WEBHOOK}
+
  jobs:
   build:
     docker:
@@ -42,24 +57,6 @@
           tag: latest
       - notify-failure
       - notify-success
-
-  notify-failure:
-    machine:
-      image: ubuntu-1604:201903-01
-    steps:
-      - slack/status:
-          fail_only: true
-          failure_message: ":wall: $CIRCLE_JOB has failed!"
-          webhook: ${SLACK_WEBHOOK}
-
-  notify-success:
-    machine:
-      image: ubuntu-1604:201903-01
-    steps:
-      - slack/status:
-          fail_only: false
-          failure_message: ":tada: $CIRCLE_JOB has been succeeded!"
-          webhook: ${SLACK_WEBHOOK}
 
   prod-approval:
     machine:
