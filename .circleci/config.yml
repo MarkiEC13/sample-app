@@ -29,11 +29,11 @@
           tag: latest
       - slack/status:
           fail_only: true
-          failure_message: "Staging $CIRCLE_JOB deployment has failed! :wall:"
+          failure_message: ":wall: Staging $CIRCLE_JOB deployment has failed!"
           webhook: ${SLACK_WEBHOOK}
       - slack/status:
           fail_only: false
-          success_message: "Staging $CIRCLE_JOB deployment has been succeeded! :tada:"
+          success_message: ":tada: Staging $CIRCLE_JOB deployment has been succeeded!"
           webhook: ${SLACK_WEBHOOK}
 
   prod-deploy:
@@ -48,11 +48,11 @@
           tag: latest
       - slack/status:
           fail_only: true
-          failure_message: "Production $CIRCLE_JOB deployment has failed! :wall:"
+          failure_message: ":wall: Production $CIRCLE_JOB deployment has failed!"
           webhook: ${SLACK_WEBHOOK}
       - slack/status:
           fail_only: false
-          success_message: "Production $CIRCLE_JOB deployment has been succeeded! :tada:"
+          success_message: ":tada: Production $CIRCLE_JOB deployment has been succeeded!"
           webhook: ${SLACK_WEBHOOK}
 
   prod-approval:
@@ -60,7 +60,7 @@
         image: 'ubuntu-1604:201903-01'
     steps:
        - slack/approval:
-          message: "Production deployment pending for approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'"
+          message: ":warning: Production deployment pending for approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'"
           color: "#42e2f4"
           webhook: "$SLACK_WEBHOOK"
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
