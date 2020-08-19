@@ -76,8 +76,6 @@
             branches:
               ignore: master
       - stage-deploy:
-          requires:
-            - dev-deploy
           filters:
             branches:
               only: master
