@@ -72,6 +72,11 @@
           filters:
             branches:
               only: master
+      - slack-setup
+      - hold:
+          type: approval
+          requires:
+              - slack-setup
       - prod-deploy:
           requires:
             - stage-deploy
