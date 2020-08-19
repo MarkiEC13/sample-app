@@ -28,17 +28,18 @@
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
 
  jobs:
-  build:
-    docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:3.1 
+  dev-deploy:
+    machine:
+      image: ubuntu-1604:201903-01 
     steps:
       - checkout
-      - run:
-          name: Restore
-          command: dotnet restore
-      - run:
-          name: Build 
-          command: dotnet build
+      - azure-acr/build-and-push-image:
+          login-server-name: $ACR_SERVER_NAME
+          registry-name: $ACR_REGISTRY_NAME
+          repo: $ACR_REPO_NAME
+          tag: dev
+      - notify-failure
+      - notify-success
 
   stage-deploy:
     machine:
@@ -49,7 +50,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: latest
+          tag: stage
       - notify-failure
       - notify-success
       - notify-approval
@@ -70,10 +71,10 @@
  workflows:
   build_and_deploy:
     jobs:
-      - build
+      - dev-deploy
       - stage-deploy:
           requires:
-            - build
+            - dev-deploy
           filters:
             branches:
               only: master
