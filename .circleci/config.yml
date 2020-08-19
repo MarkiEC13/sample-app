@@ -34,11 +34,11 @@
           tag: latest
       - slack/status:
           fail_only: true
-          failure_message: "Staging deployment failed!"
+          failure_message: "Staging $CIRCLE_JOB deployment has failed! :headbang:"
           webhook: ${SLACK_WEBHOOK}
       - slack/status:
           fail_only: false
-          success_message: "Staging deployment has been completed!"
+          success_message: "Staging $CIRCLE_JOB deployment has been succeeded! :tada::tada::tada:"
           webhook: ${SLACK_WEBHOOK}
 
   prod-deploy:
