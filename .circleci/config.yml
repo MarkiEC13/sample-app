@@ -19,6 +19,14 @@
           failure_message: ":tada: $CIRCLE_JOB has been succeeded!"
           webhook: ${SLACK_WEBHOOK}
 
+  notify-approval:
+    steps:
+       - slack/approval:
+          message: ":warning: Production deployment pending for approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'"
+          color: "#42e2f4"
+          webhook: "$SLACK_WEBHOOK"
+          url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
+
  jobs:
   build:
     docker:
@@ -44,6 +52,7 @@
           tag: latest
       - notify-failure
       - notify-success
+      - notify-approval
 
   prod-deploy:
     machine:
@@ -78,12 +87,9 @@
           filters:
             branches:
               only: master
-      - prod-approval:
-          requires:
-              - stage-deploy
       - prod-deploy:
           requires:
-            - prod-approval
+            - stage-deploy
           type: approval
           filters:
             branches:
