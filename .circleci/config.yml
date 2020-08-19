@@ -34,11 +34,11 @@
           tag: latest
       - slack/status:
           fail_only: true
-          failure_message: "Staging $CIRCLE_JOB deployment has failed! :headbang:"
+          failure_message: "Staging $CIRCLE_JOB deployment has failed! :wall:"
           webhook: ${SLACK_WEBHOOK}
       - slack/status:
           fail_only: false
-          success_message: "Staging $CIRCLE_JOB deployment has been succeeded! :tada::tada::tada:"
+          success_message: "Staging $CIRCLE_JOB deployment has been succeeded! :tada:"
           webhook: ${SLACK_WEBHOOK}
 
   prod-deploy:
@@ -51,6 +51,16 @@
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
           tag: latest
+
+  slack-setup:
+    machine:
+        image: 'ubuntu-1604:201903-01'
+    steps:
+       - slack/approval:
+          message: "Production deployment pending for approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'"
+          color: "#42e2f4"
+          webhook: "$SLACK_WEBHOOK"
+          url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
 
  workflows:
   build_and_deploy:
@@ -65,6 +75,7 @@
       - prod-deploy:
           requires:
             - stage-deploy
+            - slack-setup
           type: approval
           filters:
             branches:
