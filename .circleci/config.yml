@@ -21,11 +21,6 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
-      - slack/notify:
-          title: "Staging Deployment"
-          message: "Staging deployment started!"
-          color: "#42e2f4"
-          webhook: ${SLACK_WEBHOOK}
       - checkout
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
@@ -51,8 +46,16 @@
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
           tag: latest
+      - slack/status:
+          fail_only: true
+          failure_message: "Production $CIRCLE_JOB deployment has failed! :wall:"
+          webhook: ${SLACK_WEBHOOK}
+      - slack/status:
+          fail_only: false
+          success_message: "Production $CIRCLE_JOB deployment has been succeeded! :tada:"
+          webhook: ${SLACK_WEBHOOK}
 
-  slack-setup:
+  prod-approval-notify:
     machine:
         image: 'ubuntu-1604:201903-01'
     steps:
@@ -72,15 +75,13 @@
           filters:
             branches:
               only: master
-      - slack-setup
-      - hold:
-          type: approval
+      - prod-approval-notify:
           requires:
-              - slack-setup
+              - stage-deploy
       - prod-deploy:
           requires:
             - stage-deploy
-            - slack-setup
+            - prod-approval-notify
           type: approval
           filters:
             branches:
