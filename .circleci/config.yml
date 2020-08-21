@@ -3,7 +3,6 @@
  orbs:
   azure-acr: circleci/azure-acr@0.2.0
   slack: circleci/slack@3.4.2
-  versioning: streamroot/versioning@0.1.1
 
  commands:
   notify-failure:
@@ -27,6 +26,29 @@
           color: "#42e2f4"
           webhook: "$SLACK_WEBHOOK"
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
+  
+  appservice-deploy:
+    parameters:
+      app-name:
+        description: |
+          Name of the application
+        type: string
+      resource-group:
+        description: |
+          Name of the resource group
+        type: string
+      image-path:
+        description: |
+          Path of the image
+        type: string
+      version:
+        description: |
+          Path of the image
+        type: string 
+    steps:
+      - run:
+          command: az webapp config container set --name <<parameters.app-name>> --resource-group <<parameters.resource-group>> --docker-custom-image-name <<parameters.image-path>>:<<parameters.version>>
+          name: Deploy container to Azure App Services
 
  jobs:
   dev-deploy:
@@ -34,12 +56,11 @@
       #docker_layer_caching: true #Does not support for free plan
       image: ubuntu-1604:201903-01 
     steps:
-      - versioning/generate
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: dev,$VERSION
+          tag: dev,v<< pipeline.number >>
       - notify-failure
       - notify-success
 
@@ -47,12 +68,11 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
-      - checkout
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: latest,<< pipeline.number >>
+          tag: latest
       - notify-failure
       - notify-success
       - notify-approval
@@ -61,12 +81,11 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
-      - checkout
-      - azure-acr/build-and-push-image:
-          login-server-name: $ACR_SERVER_NAME
-          registry-name: $ACR_REGISTRY_NAME
-          repo: $ACR_REPO_NAME
-          tag: latest
+      - appservice-deploy:
+          app-name: iamsampleapp
+          resource-group: IAM-organization-staging-rg
+          image-path: sampleappcontainerregistry.azurecr.io/sampleapp
+          version: latest
       - notify-failure
       - notify-success
 
