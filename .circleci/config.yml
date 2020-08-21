@@ -33,12 +33,11 @@
       #docker_layer_caching: true #Does not support for free plan
       image: ubuntu-1604:201903-01 
     steps:
-      - checkout
       - azure-acr/build-and-push-image:
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: $CIRCLE_TAG
+          tag: dev,<< pipeline.number >>
       - notify-failure
       - notify-success
 
@@ -51,7 +50,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: stage
+          tag: latest,<< pipeline.number >>
       - notify-failure
       - notify-success
       - notify-approval
