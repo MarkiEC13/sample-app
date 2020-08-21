@@ -100,7 +100,10 @@
           filters:
             branches:
               only: master
+      - hold:
+         type: approval
+         requires:
+           - stage-deploy
       - prod-deploy:
           requires:
-            - stage-deploy
-          type: approval
+            - hold
