@@ -103,3 +103,4 @@
       - prod-deploy:
           requires:
             - stage-deploy
+          type: approval
