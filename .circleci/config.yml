@@ -30,7 +30,7 @@
  jobs:
   dev-deploy:
     machine:
-      docker_layer_caching: true
+      #docker_layer_caching: true #Does not support for free plan
       image: ubuntu-1604:201903-01 
     steps:
       - checkout
@@ -38,7 +38,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: dev
+          tag: $CIRCLE_TAG
       - notify-failure
       - notify-success
 
