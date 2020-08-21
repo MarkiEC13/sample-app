@@ -16,7 +16,7 @@
     steps:
       - slack/status:
           fail_only: false
-          failure_message: ":tada: $CIRCLE_JOB ($CIRCLE_TAG) has been succeeded!"
+          failure_message: ":tada: $CIRCLE_JOB has been succeeded!"
           webhook: ${SLACK_WEBHOOK}
 
   notify-approval:
@@ -103,7 +103,3 @@
       - prod-deploy:
           requires:
             - stage-deploy
-          type: approval
-          filters:
-            branches:
-              only: master
