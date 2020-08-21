@@ -39,7 +39,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: dev,<< pipeline.number >>,$VERSION
+          tag: dev,$VERSION
       - notify-failure
       - notify-success
 
