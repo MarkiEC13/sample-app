@@ -60,7 +60,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: dev,v<< pipeline.number >>
+          tag: dev
       - notify-failure
       - notify-success
 
@@ -72,7 +72,7 @@
           login-server-name: $ACR_SERVER_NAME
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
-          tag: latest
+          tag: latest,v<< pipeline.number >>
       - notify-failure
       - notify-success
       - notify-approval
@@ -85,7 +85,7 @@
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
           image-path: sampleappcontainerregistry.azurecr.io/sampleapp
-          version: latest
+          version: v<< pipeline.number >>
       - notify-failure
       - notify-success
 
