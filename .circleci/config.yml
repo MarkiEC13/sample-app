@@ -8,14 +8,10 @@
  commands:
   notify-status:
     steps:
-      - when:
-          condition: on_success
-          steps:
-            - notify-approval
-      - when:
-          condition: on_fail
-          steps:
-            - notify-failure
+      - slack/status:
+          failure_message: ":wall: $CIRCLE_JOB has failed!"
+          success_message: ":tada: $CIRCLE_JOB has been succeeded!"
+          webhook: ${SLACK_WEBHOOK}
 
   notify-failure:
     steps:
@@ -91,6 +87,7 @@
       - run:
           command: fail please
       - notify-status
+      - notify-approval
 
   prod-deploy:
     machine:
