@@ -42,7 +42,6 @@
         description: |
           Name of SP tenant
         type: string
-    executor: azure-cli/default
     steps:
       - azure-cli/install
       - azure-cli/login-with-service-principal:
