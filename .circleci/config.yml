@@ -80,7 +80,7 @@
       - notify-success:
         when: on_success
       - when:
-          condition: $SLACK_BUILD_STATUS = "success"
+          condition: $SLACK_BUILD_STATUS == "success"
           steps:
             - notify-success
             - notify-approval
