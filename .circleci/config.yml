@@ -84,9 +84,9 @@
     steps:
       - azure-cli/install
       - azure-cli/login-with-service-principal:
-        azure-sp: $AZURE_SP
-        azure-sp-password: $AZURE_SP_PASSWORD
-        azure-sp-tenant: $AZURE_SP_TENANT
+          azure-sp: $AZURE_SP
+          azure-sp-password: $AZURE_SP_PASSWORD
+          azure-sp-tenant: $AZURE_SP_TENANT
       - appservice-deploy:
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
