@@ -78,6 +78,8 @@
           repo: $ACR_REPO_NAME
           tag: latest,v<< pipeline.number >>
       - notify-failure
+      - run:
+        command: failed
       - when:
           condition: on_success
           steps:
