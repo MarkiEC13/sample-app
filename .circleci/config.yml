@@ -83,7 +83,7 @@
       image: ubuntu-1604:201903-01 
     steps:
       - azure-cli/install
-      - azure-cli/login-with-service-principal:
+      - azure-cli/login-with-service-principal
       - appservice-deploy:
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
