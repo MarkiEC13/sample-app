@@ -78,14 +78,11 @@
           repo: $ACR_REPO_NAME
           tag: latest,v<< pipeline.number >>
       - notify-failure
-      - run:
-          command: notify-success
-          name: Notify success
-          when: on_success
-      - run:
-          command: notify-approval
-          name: Notify approval
-          when: on_success
+      - when:
+          condition: on_success
+          steps:
+            - notify-success
+            - notify-approval
 
   prod-deploy:
     machine:
