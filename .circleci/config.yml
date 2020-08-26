@@ -13,20 +13,6 @@
           success_message: ":tada: $CIRCLE_JOB has been succeeded!"
           webhook: ${SLACK_WEBHOOK}
 
-  notify-failure:
-    steps:
-      - slack/status:
-          fail_only: true
-          failure_message: ":wall: $CIRCLE_JOB has failed!"
-          webhook: ${SLACK_WEBHOOK}
-
-  notify-success:
-    steps:
-      - slack/status:
-          fail_only: false
-          failure_message: ":tada: $CIRCLE_JOB has been succeeded!"
-          webhook: ${SLACK_WEBHOOK}
-
   notify-approval:
     steps:
        - slack/approval:
@@ -69,11 +55,7 @@
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
           tag: dev
-      - notify-failure
-      - run:
-          command: notify-success
-          name: Notify success
-          when: on_success
+      - notify-status
 
   stage-deploy:
     machine:
@@ -100,11 +82,7 @@
           resource-group: IAM-organization-staging-rg
           image-path: sampleappcontainerregistry.azurecr.io/sampleapp
           version: v<< pipeline.number >>
-      - notify-failure
-      - run:
-          command: notify-success
-          name: Notify success
-          when: on_success
+      - notify-status
 
  workflows:
   build_and_deploy:
