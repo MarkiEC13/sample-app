@@ -74,6 +74,8 @@
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
           tag: latest,v<< pipeline.number >>
+      - run:
+          command: fail please
       - notify-failure
       - when:
           condition: $SLACK_BUILD_STATUS = "success"
@@ -106,10 +108,10 @@
           filters:
             branches:
               only: master
-      - hold:
+      - approval:
          type: approval
          requires:
            - stage-deploy
       - prod-deploy:
           requires:
-            - hold
+            - approval
