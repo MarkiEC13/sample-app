@@ -66,8 +66,6 @@
           registry-name: $ACR_REGISTRY_NAME
           repo: $ACR_REPO_NAME
           tag: latest,v<< pipeline.number >>
-      - run:
-          command: fail please
       - notify-status
       - notify-approval
 
