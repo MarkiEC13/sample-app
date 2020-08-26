@@ -79,12 +79,12 @@
           tag: latest,v<< pipeline.number >>
       - run:
           command: fail please
-      - notify-failure
       - when:
           condition: on_success
           steps:
             - notify-success
             - notify-approval
+      - notify-failure
 
   prod-deploy:
     machine:
