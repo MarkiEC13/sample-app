@@ -28,13 +28,14 @@
           webhook: "$SLACK_WEBHOOK"
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
   
-  verify-azurecli-install:
+  login-to-azure:
     executor: azure-cli/default
     steps:
       - azure-cli/install
+      - azure-cli/login-with-service-principal
       - run:
-          command: az -v
-          name: Verify Azure CLI is installed
+        command: az resource list
+        name: List resources of tenant stored as `AZURE_TENANT` env var
 
   appservice-deploy:
     parameters:
@@ -90,6 +91,7 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
+      - login-to-azure
       - appservice-deploy:
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
