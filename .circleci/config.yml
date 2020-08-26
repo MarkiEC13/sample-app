@@ -6,6 +6,18 @@
   azure-cli: circleci/azure-cli@1.0.0
 
  commands:
+  notify-status:
+    steps:
+      - when:
+          condition: on_success
+          steps:
+            - notify-success
+            - notify-approval
+      - when:
+          condition: on_fail
+          steps:
+            - notify-failure
+
   notify-failure:
     steps:
       - slack/status:
@@ -79,12 +91,7 @@
           tag: latest,v<< pipeline.number >>
       - run:
           command: fail please
-      - when:
-          condition: on_success
-          steps:
-            - notify-success
-            - notify-approval
-      - notify-failure
+      - notify-status
 
   prod-deploy:
     machine:
