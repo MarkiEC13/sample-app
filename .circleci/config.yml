@@ -75,8 +75,11 @@
           repo: $ACR_REPO_NAME
           tag: latest,v<< pipeline.number >>
       - notify-failure
-      - notify-success
-      - notify-approval
+      - when:
+          condition: $SLACK_BUILD_STATUS = "success"
+          steps:
+            - notify-success
+            - notify-approval
 
   prod-deploy:
     machine:
