@@ -77,11 +77,14 @@
       - run:
           command: fail please
       - notify-failure
-      - when:
-          condition: $SLACK_BUILD_STATUS == "success"
-          steps:
-            - notify-success
-            - notify-approval
+      - run:
+          command: notify-success
+          name: Notify success
+          when: on_success
+      - run:
+          command: notify-approval
+          name: Notify approval
+          when: on_success
 
   prod-deploy:
     machine:
