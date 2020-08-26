@@ -28,6 +28,14 @@
           webhook: "$SLACK_WEBHOOK"
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
   
+  azurecli-install:
+    executor: azure-cli/default
+    steps:
+      - azure-cli/install
+      - run:
+          command: az -v
+          name: Verify Azure CLI is installed
+
   appservice-deploy:
     parameters:
       app-name:
@@ -47,6 +55,7 @@
           Path of the image
         type: string 
     steps:
+      - azurecli-install
       - run:
           command: az webapp config container set --name <<parameters.app-name>> --resource-group <<parameters.resource-group>> --docker-custom-image-name <<parameters.image-path>>:<<parameters.version>>
           name: Deploy container to Azure App Services
