@@ -55,7 +55,6 @@
           Path of the image
         type: string 
     steps:
-      - azurecli-install
       - run:
           command: az webapp config container set --name <<parameters.app-name>> --resource-group <<parameters.resource-group>> --docker-custom-image-name <<parameters.image-path>>:<<parameters.version>>
           name: Deploy container to Azure App Services
@@ -91,6 +90,7 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
+      - azurecli-install
       - appservice-deploy:
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
