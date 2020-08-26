@@ -29,10 +29,26 @@
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
   
   login-to-azure:
+    parameters:
+      azure-sp:
+        description: |
+          Name of the SP
+        type: string
+      azure-sp-password:
+        description: |
+          SP password
+        type: string
+      azure-sp-tenant:
+        description: |
+          Name of SP tenant
+        type: string
     executor: azure-cli/default
     steps:
       - azure-cli/install
-      - azure-cli/login-with-service-principal
+      - azure-cli/login-with-service-principal:
+        azure-sp: <<parameters.azure-sp>>
+        azure-sp-password: <<parameters.azure-sp-password>>
+        azure-sp-tenant: <<parameters.azure-sp-tenant>>
       - run:
         command: az resource list
         name: List resources of tenant stored as `AZURE_TENANT` env var
@@ -91,7 +107,10 @@
     machine:
       image: ubuntu-1604:201903-01 
     steps:
-      - login-to-azure
+      - login-to-azure:
+        azure-sp: $AZURE_SP
+        azure-sp-password: $AZURE_SP_PASSWORD
+        azure-sp-tenant: $AZURE_SP_TENANT
       - appservice-deploy:
           app-name: iamsampleapp
           resource-group: IAM-organization-staging-rg
